@@ -21,7 +21,10 @@
       :class="$style.flag"
     />
     <div>
-      {{ getConvertedDataFromApi[`${currency}${getCurrentCurrency}`] }}
+      {{
+        getConvertedDataFromApi[`${currency}${getCurrentCurrency}`] +
+        ` ${getCurrentCurrency}`
+      }}
     </div>
     <Button :typeBtn="getTypeOfBtns.removeCurrency" :id="this.id" />
   </div>

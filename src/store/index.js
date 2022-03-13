@@ -17,6 +17,7 @@ export default new Vuex.Store({
     baseCurrency: "",
     isShowChoiceWindow: true,
     dataFromApi: {
+      // from api
       status: 200,
       message: "rates",
       data: {
