@@ -68,10 +68,15 @@ export default {
     ...mapGetters(["getCurrentCurrency"]),
   },
   methods: {
-    ...mapMutations(["setCurrentCurrency", "toogleIsShowChoiceWindow"]),
+    ...mapMutations([
+      "setCurrentCurrency",
+      "toogleIsShowChoiceWindow",
+      "setCurrentCurrency",
+    ]),
     setCurrency(currency) {
       if (this.getCurrentCurrency === currency) {
         this.toogleIsShowChoiceWindow();
+        this.setCurrentCurrency("");
       } else {
         this.setCurrentCurrency(currency);
       }

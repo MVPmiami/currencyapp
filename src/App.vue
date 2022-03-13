@@ -13,7 +13,7 @@
 <script>
 import StartWindow from "./components/organisms/StartWindow.vue";
 import Content from "./components/organisms/Content.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   name: "App",
   components: {
@@ -24,10 +24,18 @@ export default {
     ...mapGetters(["getIsShowChoiceWindow"]),
   },
   methods: {
-    ...mapActions(["renderLocalStorageCurrency"]),
+    ...mapMutations(["getDataFromApiForCurrentCurrency"]),
+    ...mapActions([
+      "renderLocalStorageCurrency",
+      "renderLocalStorageIsShowChoiseWindow",
+      "renderLocalNewUserCurrencies",
+    ]),
   },
   mounted() {
     this.renderLocalStorageCurrency();
+    this.renderLocalStorageIsShowChoiseWindow();
+    this.getDataFromApiForCurrentCurrency();
+    this.renderLocalNewUserCurrencies();
   },
 };
 </script>

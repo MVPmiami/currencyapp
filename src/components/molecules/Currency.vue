@@ -23,11 +23,13 @@
     <div>
       {{ getConvertedDataFromApi[`${currency}${getCurrentCurrency}`] }}
     </div>
+    <Button :typeBtn="getTypeOfBtns.removeCurrency" :id="this.id" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import Button from "./../atoms/Button.vue";
 export default {
   name: "Currency",
   props: {
@@ -35,9 +37,20 @@ export default {
       type: String,
       default: "",
     },
+    id: {
+      type: String,
+      default: "",
+    },
+  },
+  components: {
+    Button,
   },
   computed: {
-    ...mapGetters(["getConvertedDataFromApi", "getCurrentCurrency"]),
+    ...mapGetters([
+      "getConvertedDataFromApi",
+      "getCurrentCurrency",
+      "getTypeOfBtns",
+    ]),
   },
 };
 </script>
@@ -49,6 +62,7 @@ export default {
 }
 .currencyWrapper {
   color: $colorText;
+  position: relative;
   padding: 0.8rem;
   border-bottom: 0.2rem solid $colorBtnUnactive;
   @include flexBox(raw);

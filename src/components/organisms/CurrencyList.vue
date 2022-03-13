@@ -1,12 +1,16 @@
 <template>
   <div :class="$style.currencyListWrapper">
-    <Currency v-for="currency in getConvertedCurrencies" :currency="currency" />
+    <Currency
+      v-for="currency in getUserCurrencies"
+      :currency="currency.name"
+      :id="currency.id"
+    />
   </div>
 </template>
 
 <script>
 import Currency from "./../molecules/Currency.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "CurrencyList",
   components: {
@@ -18,7 +22,14 @@ export default {
       "getCurrentCurrency",
       "getConvertedDataFromApi",
       "getConvertedCurrencies",
+      "getUserCurrencies",
     ]),
+  },
+  methods: {
+    ...mapActions(["renderLocalUserCurrencies"]),
+  },
+  mounted() {
+    this.renderLocalUserCurrencies();
   },
 };
 </script>

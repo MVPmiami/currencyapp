@@ -5,6 +5,13 @@
       <h2>Выбранная основная валюта</h2>
     </div>
     <CurrencyList />
+    <Button
+      v-if="getUserCurrencies.length <= 2"
+      :typeBtn="getTypeOfBtns.addCurrency"
+    />
+    <NewCurrency
+      v-if="getIsShowNewListOfCurrency && getUserCurrencies.length <= 2"
+    />
   </div>
 </template>
 
@@ -12,15 +19,24 @@
 import BaseCurrency from "./../atoms/BaseCurrency.vue";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import CurrencyList from "./../organisms/CurrencyList.vue";
+import Button from "./../atoms/Button.vue";
+import NewCurrency from "./../atoms/NewCurrency.vue";
 
 export default {
   name: "Content",
   components: {
     BaseCurrency,
     CurrencyList,
+    Button,
+    NewCurrency,
   },
   computed: {
-    ...mapGetters(["getCurrentCurrency"]),
+    ...mapGetters([
+      "getCurrentCurrency",
+      "getTypeOfBtns",
+      "getUserCurrencies",
+      "getIsShowNewListOfCurrency",
+    ]),
   },
   methods: {},
 };

@@ -1,11 +1,24 @@
 <template>
-  <a-button
-    v-if="typeBtn === 'showCurrency'"
-    type="primary"
-    :class="$style.button"
-    @click="showCurrency"
-    >Показать курс</a-button
-  >
+  <div>
+    <!--Использование таких вот библиотек плохая практика, подключил кнопку, но дальше будет свой код-->
+    <a-button
+      v-if="typeBtn === 'showCurrency'"
+      type="primary"
+      :class="$style.button"
+      @click="showCurrency"
+      >Показать курс</a-button
+    >
+    <div
+      v-if="typeBtn === 'removeCurrency'"
+      @click="deleteCurrency"
+      :class="$style.deleteBtn"
+    ></div>
+    <div
+      v-if="typeBtn === 'addCurrency'"
+      @click="showNewListOfCurrency"
+      :class="$style.addCurrencyBtn"
+    ></div>
+  </div>
 </template>
 
 <script>
@@ -18,18 +31,32 @@ export default {
       type: String,
       default: "",
     },
+    id: {
+      type: String,
+      default: "",
+    },
   },
   methods: {
     ...mapMutations([
       "toogleIsShowChoiceWindow",
       "getDataFromApiForCurrentCurrency",
       "setConvertedCurrencies",
+      "setUserCurrencies",
+      "removeCurrency",
+      "toogleNewListOfCurrency",
     ]),
     ...mapActions(["getCurrencies"]),
     showCurrency() {
       this.toogleIsShowChoiceWindow();
       this.getDataFromApiForCurrentCurrency();
       this.setConvertedCurrencies();
+      this.setUserCurrencies();
+    },
+    deleteCurrency() {
+      this.removeCurrency(this.id);
+    },
+    showNewListOfCurrency() {
+      this.toogleNewListOfCurrency();
     },
   },
 };
@@ -47,5 +74,19 @@ export default {
     color: $colorText !important;
     border: 1px solid $colorBtnActive !important;
   }
+}
+.deleteBtn {
+  @include btn();
+  position: absolute;
+  right: 0;
+  bottom: 0.8rem;
+  background-image: url("./../../assets/img/close.png") !important;
+}
+.addCurrencyBtn {
+  position: absolute;
+  left: 1.75rem;
+  bottom: -3rem;
+  @include btn();
+  background-image: url("./../../assets/img/add.png") !important;
 }
 </style>

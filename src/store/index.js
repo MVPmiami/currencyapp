@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 Vue.use(Vuex);
 
@@ -10,7 +11,6 @@ export default new Vuex.Store({
     currencies: ["BYN", "RUB", "USD", "EUR"],
     typeOfBtns: {
       showCurrency: "showCurrency",
-      changeCurrency: "changeCurrency",
       addCurrency: "addCurrency",
       removeCurrency: "removeCurrency",
     },
@@ -20,24 +20,36 @@ export default new Vuex.Store({
       status: 200,
       message: "rates",
       data: {
-        USDBYN: "2.20558",
-        USDRUB: "64.1824",
-        USDEUR: "0.92674",
-        EURBYN: "2.37994",
-        EURRUB: "69.244",
-        EURUSD: "1.07905",
-        RUBBYN: "0.0343642",
-        RUBUSD: "0.0155806",
-        RUBEUR: "0.0144437",
-        BYNRUB: "29.1002",
-        BYNUSD: "0.453396",
-        BYNEUR: "0.420182",
+        USDBYN: "3.29",
+        USDRUB: "116.75",
+        USDEUR: "0.91642",
+        EURBYN: "3.65",
+        EURRUB: "128.95",
+        EURUSD: "1.09",
+        RUBBYN: "0.0284",
+        RUBUSD: "0.008565",
+        RUBEUR: "0.007755",
+        BYNRUB: "35.24",
+        BYNUSD: "0.3038",
+        BYNEUR: "0.27415",
       },
     },
     convertedData: {},
     convertedCurrencies: [],
+    userCurrencies: [],
+    newUserCurrencies: [],
+    isShowNewListOfCurrency: false,
   },
   getters: {
+    getIsShowNewListOfCurrency: (state) => {
+      return state.isShowNewListOfCurrency;
+    },
+    getNewUserCurrencies: (state) => {
+      return state.newUserCurrencies;
+    },
+    getUserCurrencies: (state) => {
+      return state.userCurrencies;
+    },
     getConvertedCurrencies: (state) => {
       return state.convertedCurrencies;
     },
@@ -64,6 +76,48 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    toogleNewListOfCurrency: (state) => {
+      state.isShowNewListOfCurrency = !state.isShowNewListOfCurrency;
+    },
+    addNewCurrency: (state, payload) => {
+      state.userCurrencies.push({ name: payload, id: uuidv4() });
+      state.newUserCurrencies = state.newUserCurrencies.filter(
+        (cur) => cur !== payload
+      );
+      localStorage.setItem(
+        "newUserCurrencies",
+        JSON.stringify(state.newUserCurrencies)
+      );
+    },
+    removeCurrency: (state, payload) => {
+      state.userCurrencies = state.userCurrencies.filter((cur) => {
+        if (cur.id !== payload) {
+          return cur;
+        } else {
+          if (!state.newUserCurrencies.includes(cur.name)) {
+            state.newUserCurrencies.push(cur.name);
+          }
+        }
+      });
+      localStorage.setItem(
+        "newUserCurrencies",
+        JSON.stringify(state.newUserCurrencies)
+      );
+      localStorage.setItem(
+        "userCurrencies",
+        JSON.stringify(state.userCurrencies)
+      );
+    },
+    setUserCurrencies: (state) => {
+      state.newUserCurrencies = [];
+      state.userCurrencies = state.convertedCurrencies.map((cur) => {
+        return { name: cur, id: uuidv4() };
+      });
+      localStorage.setItem(
+        "userCurrencies",
+        JSON.stringify(state.userCurrencies)
+      );
+    },
     setConvertedCurrencies: (state) => {
       state.convertedCurrencies = [];
       state.currencies.filter((cur) => {
@@ -83,6 +137,10 @@ export default new Vuex.Store({
     },
     toogleIsShowChoiceWindow: (state) => {
       state.isShowChoiceWindow = !state.isShowChoiceWindow;
+      localStorage.setItem(
+        "isShowChoiceWindow",
+        JSON.stringify(state.isShowChoiceWindow)
+      );
     },
     setCurrentCurrency: (state, payload) => {
       state.baseCurrency = payload;
@@ -95,9 +153,30 @@ export default new Vuex.Store({
           ))
         : "";
     },
+    renderLocalStorageIsShowChoiseWindow: (state) => {
+      localStorage.getItem("isShowChoiceWindow")
+        ? (state.isShowChoiceWindow = JSON.parse(
+            localStorage.getItem("isShowChoiceWindow")
+          ))
+        : true;
+    },
+    renderLocalUserCurrencies: (state) => {
+      localStorage.getItem("userCurrencies")
+        ? (state.userCurrencies = JSON.parse(
+            localStorage.getItem("userCurrencies")
+          ))
+        : [];
+    },
+    renderLocalNewUserCurrencies: (state) => {
+      localStorage.getItem("newUserCurrencies")
+        ? (state.newUserCurrencies = JSON.parse(
+            localStorage.getItem("newUserCurrencies")
+          ))
+        : [];
+    },
     getAllCurrenciesFromApi: (state) => {
       /*
-      Необходим доступ к бэку , чтобы прописать CORS, Либо писать midleware. Думаю мысль ясна
+      Необходим доступ к бэку , чтобы прописать CORS, Либо писать midleware,либо брать платную апи и просить доступ к статике на гитехабе. Думаю мысль ясна
       axios
       .get("https://currate.ru/api/?get=currency_list&key=1d67f10c51117a2ba1aa1aca81aee091")
       .then(res => res.json())
@@ -108,6 +187,15 @@ export default new Vuex.Store({
   actions: {
     renderLocalStorageCurrency(context) {
       context.commit("renderLocalStorageCurrency");
+    },
+    renderLocalStorageIsShowChoiseWindow(context) {
+      context.commit("renderLocalStorageIsShowChoiseWindow");
+    },
+    renderLocalUserCurrencies(context) {
+      context.commit("renderLocalUserCurrencies");
+    },
+    renderLocalNewUserCurrencies(context) {
+      context.commit("renderLocalNewUserCurrencies");
     },
     getCurrencies(context) {
       context.commit("getAllCurrenciesFromApi");
