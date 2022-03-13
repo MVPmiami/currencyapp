@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Open+Sans:wght@600&display=swap");
+$colorBcg: #284f5a;
+$colorBtnActive: #29abe5;
+$colorBtnUnactive: #39829f;
+$colorHeader: #4da1c2;
+$colorText: #f4f7f8;
+$font-header: "Open Sans";
+$font-text: "Inter";
+
+@mixin fontHeader($property) {
+  font-family: $font-header;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: $property;
+  line-height: normal;
+}
+
+@mixin fontText($property) {
+  font-family: $font-text;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: $property;
+  line-height: normal;
+}
+
+@mixin flagBox() {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 17rem;
+  height: 17rem;
+}
+
+@mixin flexBox($direction) {
+    display: flex;
+    flex-flow: $direction;
+    justify-content: center;
+    align-items: center;
+  }
