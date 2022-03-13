@@ -4,9 +4,7 @@
       <BaseCurrency :typeCurrency="getCurrentCurrency" :smallIcon="true" />
       <h2>Выбранная основная валюта</h2>
     </div>
-    <div>
-      <CurrencyList />
-    </div>
+    <CurrencyList />
   </div>
 </template>
 
@@ -41,6 +39,6 @@ export default {
     margin-left: 10px;
   }
   padding-bottom: 1rem;
-  border-bottom: 0.2rem solid $colorText;
+  border-bottom: 0.2rem solid $colorBtnUnactive;
 }
 </style>

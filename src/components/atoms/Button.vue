@@ -20,11 +20,16 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["toogleIsShowChoiceWindow"]),
+    ...mapMutations([
+      "toogleIsShowChoiceWindow",
+      "getDataFromApiForCurrentCurrency",
+      "setConvertedCurrencies",
+    ]),
     ...mapActions(["getCurrencies"]),
     showCurrency() {
       this.toogleIsShowChoiceWindow();
-      this.getCurrencies();
+      this.getDataFromApiForCurrentCurrency();
+      this.setConvertedCurrencies();
     },
   },
 };

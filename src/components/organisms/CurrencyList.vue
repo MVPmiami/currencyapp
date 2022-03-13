@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <Currency
-      v-for="currency in getAllCurrencies"
-      :currency="currency !== getCurrentCurrency ? currency : null"
-    />
+  <div :class="$style.currencyListWrapper">
+    <Currency v-for="currency in getConvertedCurrencies" :currency="currency" />
   </div>
 </template>
 
@@ -16,9 +13,19 @@ export default {
     Currency,
   },
   computed: {
-    ...mapGetters(["getAllCurrencies", "getCurrentCurrency"]),
+    ...mapGetters([
+      "getAllCurrencies",
+      "getCurrentCurrency",
+      "getConvertedDataFromApi",
+      "getConvertedCurrencies",
+    ]),
   },
 };
 </script>
 
-<style></style>
+<style lang="scss" module>
+.currencyListWrapper {
+  width: 100%;
+  @include flexBox(column);
+}
+</style>
